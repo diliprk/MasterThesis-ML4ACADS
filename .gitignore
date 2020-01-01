@@ -1,6 +1,8 @@
 
 *.pyc
 *.09
+*.fddn
+*.result_HYBRD1
 *.txt
 *.ipynb_checkpoints
 HybridPINN/LTR_Vhat_reinit.csv

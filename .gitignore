@@ -6,3 +6,6 @@
 *.txt
 *.ipynb_checkpoints
 HybridPINN/LTR_Vhat_reinit.csv
+HybridPINN/LTR_Vhat.result_HYBRD1
+HybridPINN/data_output/LTR_Zeta_df.csv
+HybridPINN/LTR_Vhat.fddn

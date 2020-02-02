@@ -1,6 +1,7 @@
+
 The two basic approaches for the Hybrid PINN architecture are contained in the following `.py` scripts:
 * `Hybrid_PINN_v1_x.py` - Refers to the **GeneralApproach** where we use normal feature scaling, `ReLu` activations in the hidden layer and random weight initializations and gradient updates with fixed learning rate.
-* `Hybrid_PINN_v2_x.py`- Refers to the **FE_LS** approach with customized Feature Engineering (`FE`), _linear activation_ in all layers,  lesser no. of neuron in the input and hidden layers, preset weight initialization and Line Search (`LS`) method to find the adaptive learning rate. This method gives more precise and faster convergence of the flowrates in lesser training iterations, albeit at a slight expense of more FDDN calls. 
+* `Hybrid_PINN_v2_x.py`- Refers to the **FE_LS** approach with customized Feature Engineering (`FE`), _linear activation_ in all layers,  lesser no. of neurons in the input and hidden layers, preset weight initialization and Line Search (`LS`) method to find the adaptive learning rate. This method gives more precise and faster convergence of the flowrates in lesser training iterations, albeit at a slight expense of more FDDN calls. 
 
 The jupyter notebooks (`.ipynb` files) in this folder imports one of the above python scripts depending on the approach (**General** or **FE_LS**). Each notebook has a customized training function call to predict one or two correction factors. The sub-variants in the filenames of the `.ipynb` files, like:
 
@@ -9,7 +10,8 @@ The jupyter notebooks (`.ipynb` files) in this folder imports one of the above p
 
 The `FDDN_Lib` script runs the FDDN Solver in batch mode (`run_fddn.bat`) and save the data frame results in a .csv file.
 
-**Misc Implementations:**
-1.) An ***Early stopping*** feature is implemented in the **GeneralApproach** which monitors the change in the `error_loss` function for the last 10 epochs and terminates the training if there is no improvement. This can be seen in action in the `PINN_v1.0_GeneralApproach_SingleHoVLoop_OneCF.ipynb` file.
-2.) All approaches also use an ***Adaptive Batch Size*** technique during the training process that removes the converged points from the training data population and also lowers the batch size when the available *training data points is < initial batch size*
+#### Misc Implementations:
+
+ 1. An ***Early stopping*** feature is implemented in the **GeneralApproach** which monitors the change in the `error_loss` function for the last 10 epochs and terminates the training if there is no improvement. This can be seen in action in the `PINN_v1.0_GeneralApproach_SingleHoVLoop_OneCF.ipynb` file.
+ 2.  All approaches also use an ***Adaptive Batch Size*** technique during the training process that removes the converged points from the training data population and also lowers the batch size when the available *training data points is < initial batch size*
 

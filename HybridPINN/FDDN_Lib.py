@@ -1,5 +1,7 @@
 ###
 # Author: Dilip Rajkumar
+# This py script contains all the functions required for calling the FDDN Solver in batch Mode
+# and storing all the results in a dataframe
 ###
 
 import pandas as pd
@@ -37,11 +39,6 @@ for i in range(len(json_data['Model1']['Elements'])):
     name_variables.append(element_name)
     zeta_values.append(zeta)
 
-# For Hybrid_PINN_v2 --> we will keep the element 'TZ-6_zmix'
-select_elements = ['TZ-6_zmix','MTR-600','R-610', 'R-611', 'R-612', 'R-613','CAOR-620_fwd', 'CAOR-620_mid', 'CAOR-620_aft', 'CAOR-621_fwd', 'CAOR-621_mid', 'CAOR-621_aft']
-# select_elements = ['MTR-600','R-610', 'R-611', 'R-612', 'R-613','CAOR-620_fwd', 'CAOR-620_mid', 'CAOR-620_aft', 'CAOR-621_fwd', 'CAOR-621_mid', 'CAOR-621_aft']
-indices = [i for i in range(len(name_variables)) if name_variables[i] in select_elements]
-
 def fddn_zeta_input(df):
     mixp_input = df.iloc[:,1].values.tolist()
     ambp_input = df.iloc[:,2].values.tolist()
@@ -49,7 +46,7 @@ def fddn_zeta_input(df):
     zeta_input = df.iloc[:,5:].values.tolist()
     return mixp_input,ambp_input,ambt_input,zeta_input
 
-def FDDN_Solver(mixp_list,ambp_list,ambt_list,zeta_list):
+def FDDN_Solver(select_elements,mixp_list,ambp_list,ambt_list,zeta_list):
     '''
     Modifies the FDDN JSON file with new values.
     Executes the FDDN solver in batch mode giving the new datapoints with zeta values as input and predicts flow rates.
@@ -57,6 +54,7 @@ def FDDN_Solver(mixp_list,ambp_list,ambt_list,zeta_list):
     '''
     FDDN_V_df = pd.DataFrame() #Initialize an Empty dataframe
 #     print('Output Column Names:\n',cols_order)
+    indices = [i for i in range(len(name_variables)) if name_variables[i] in select_elements]
     for i in range(len(zeta_list)):
         new_zeta = list( map(str, zeta_list[i]) )
         for (index, value) in zip(indices, new_zeta):

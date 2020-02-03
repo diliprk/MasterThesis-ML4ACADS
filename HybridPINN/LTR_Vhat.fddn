@@ -95,7 +95,7 @@
         "Name": "ReferencePressure",
         "Description": "Reference Pressure",
         "Unit": "Pa",
-        "Value": "101401.6",
+        "Value": "102286.7009",
         "Type": "Float",
         "Solver": "Both"
       },
@@ -462,7 +462,7 @@
           {
             "Name": "p1",
             "Unit": "[Pa]",
-            "Value": "2600.0",
+            "Value": "2602.399025",
             "Formula": ""
           },
           {
@@ -486,7 +486,7 @@
           {
             "Name": "T1",
             "Unit": "[K]",
-            "Value": "299.38666666666666",
+            "Value": "294.434538",
             "Formula": "=273.15+Summary!RC[7]"
           },
           {
@@ -688,7 +688,7 @@
           {
             "Name": "Zeta",
             "Unit": "[-]",
-            "Value": "8.178990855231786",
+            "Value": "3.6345506534444034",
             "Formula": ""
           },
           {
@@ -2152,7 +2152,7 @@
           {
             "Name": "Zeta",
             "Unit": "[-]",
-            "Value": "6.741077631819924",
+            "Value": "5.591146951220202",
             "Formula": ""
           },
           {
@@ -2640,7 +2640,7 @@
           {
             "Name": "Zeta",
             "Unit": "[-]",
-            "Value": "7.721656605586121",
+            "Value": "6.862828444872293",
             "Formula": ""
           },
           {

@@ -222,9 +222,8 @@ class PINN(object):
         # print('X[:,-1]:', X[:,-1], type(X[:,-1]), X[:,-1].shape)
         ### BACKWARD PASS ###
         # Output error
-        flowrate_diff =  X[:,-1] - V_hat_FDDN_scaled.flatten('F') # Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
-        # print('flowrate_diff:', list(flowrate_diff), type(flowrate_diff), flowrate_diff.shape)
-        flowrate_diff = np.reshape(flowrate_diff, (n_records,1))
+        flowrate_diff =   # Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
+        flowrate_diff = np.reshape(X[:,-1] - V_hat_FDDN_scaled.flatten('F'), (n_records,1))
         # print('flowrate_diff:', list(flowrate_diff), type(flowrate_diff), flowrate_diff.shape)
 
         error = (1/(2 * (V_max)**2)) * ((flowrate_diff)**2).sum() + (1/(2* n_records)) * ((c_f - 1)**2).sum() #This does not work in SingleHoV mode. minibatch also unknown

@@ -82,7 +82,7 @@ class PINN(object):
 
         delta_weights_i_h = np.zeros(self.weights_input_to_hidden.shape)  # Create empty array filled with zeros
         delta_weights_h_o = np.zeros(self.weights_hidden_to_output.shape) # Create empty array filled with zeros
-        V_true_LTR_arr, V_hat_FDDN_arr, V_hat_epsi_FDDN_arr, hidden_output_array,row_ids_remove,  break_flag_arr, c_f_array  = [], [], [], [], [], [], []
+        V_true_LTR_arr, V_hat_FDDN_arr, V_hat_epsi_FDDN_arr, hidden_output_array, break_flag_arr, c_f_array  = [], [], [], [], [], []
         # Run forward pass and FDDN_SolverProcess for each data point in the current batch
         for X, row_id, dia in zip(features, batch_idx, diameters):
             c_f, cf_epsi, final_outputs, hidden_outputs = self.forward_pass(X)  # Implement the forward pass
@@ -97,7 +97,6 @@ class PINN(object):
 
             # Append elements into a list
             break_flag_arr.append(break_flag)
-            row_ids_remove.append(row_id)
             V_true_LTR_arr.append(V_true_LTR[0])
             V_hat_FDDN_arr.append(V_hat_FDDN[0])
             V_hat_epsi_FDDN_arr.append(V_hat_epsi_FDDN[0])
@@ -111,7 +110,7 @@ class PINN(object):
         self.weights_input_to_hidden  += -self.lr * delta_weights_i_h / n_records # update input-to-hidden weights with gradient descent step
 
 
-        return row_ids_remove,error,V_hat_FDDN_arr,V_true_LTR_arr,break_flag_arr,c_f_array
+        return error,V_hat_FDDN_arr,V_true_LTR_arr,break_flag_arr,c_f_array
 
     def early_stopping(self,train_loss, last_n_epochs = 10):
         list_elements_diff = np.diff(train_loss[-last_n_epochs:])
@@ -170,31 +169,37 @@ class PINN(object):
 
     def backward_pass(self, X, hidden_outputs, delta_weights_i_h, delta_weights_h_o, V_hat_FDDN, V_hat_epsi_FDDN, c_f, V_max_org):
         n_records = X.shape[0]
+        print('No. of Records:', n_records)
         V_hat_epsi_FDDN_scaled = V_hat_epsi_FDDN/V_max_org
         V_hat_FDDN_scaled = V_hat_FDDN/V_max_org
         V_max = 1.0 # as the data has already been normalized by max
 
         ### BACKWARD PASS ###
+        # Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
+        flowrate_diff = V_hat_FDDN_scaled.flatten('F') - X[:,-1]
+        # print('flowrate_diff:', list(flowrate_diff), type(flowrate_diff), flowrate_diff.shape)
         # Output error
-        flowrate_diff = V_hat_FDDN_scaled.flatten('F') - X[:,-1]# Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
         error = (1/(2 * (V_max)**2)) * ((flowrate_diff)**2).sum() + (1/(2* n_records)) * ((c_f - 1)**2).sum()
 
         # Derivative of flowrate with respect to neural network o/p (i.e correction factor)
         dv_da = (V_hat_epsi_FDDN - V_hat_FDDN) / self.epsi
-        # print('dv_da:',dv_da, type(dv_da), dv_da.shape)
+        # print('dv_da:',list(dv_da), type(dv_da), dv_da.shape)
         # Backpropagated error terms
         output_error_term = (1/(V_max)**2) * (flowrate_diff)*dv_da + (1/n_records) * (c_f - 1) #Delta_k
+        # print('output_error_term:', list(output_error_term), type(output_error_term), output_error_term.shape)
 
         # Hidden layer's contribution to the error
         hidden_error = np.dot(self.weights_hidden_to_output, output_error_term)
+        # print('hidden_error:', list(hidden_error), type(hidden_error), hidden_error.shape)
         hidden_error_term = hidden_error * 1 * (hidden_outputs > 0) # For ReLu activation return it's derivative 1.*(h > 0)
-
+        # print('hidden_error_term:', list(hidden_error_term), type(hidden_error_term), hidden_error_term.shape)
         # Weight step (input to hidden)
         delta_weights_i_h += np.dot(X.T, hidden_error_term.T)
 
         # Weight step (hidden to output)
         delta_weights_h_o += np.dot(hidden_outputs, output_error_term.T)
-
+        # print('delta_weights_i_h:', list(delta_weights_i_h), type(delta_weights_i_h), delta_weights_i_h.shape)
+        # print('delta_weights_h_o:', list(delta_weights_h_o), type(delta_weights_h_o), delta_weights_h_o.shape)
         return error, delta_weights_i_h, delta_weights_h_o
 
 

@@ -13,5 +13,4 @@ The `FDDN_Lib` script runs the FDDN Solver in batch mode (`run_fddn.bat`) and sa
 #### Misc Implementations:
 
  1. An ***Early stopping*** feature is implemented in the **GeneralApproach** which monitors the change in the `error_loss` function for the last 10 epochs and terminates the training if there is no improvement. This can be seen in action in the `PINN_v1.0_GeneralApproach_SingleHoVLoop_OneCF.ipynb` file.
- 2.  All approaches also use an ***Adaptive Batch Size*** technique during the training process that removes the converged points from the training data population and also lowers the batch size when the available *training data points is < initial batch size*
-
+ 2.  The `miniBatch` versions also use an ***Adaptive Batch Size*** technique during the training process that removes the converged points from the training data population and also lowers the batch size when the available *training data points is < initial batch size*

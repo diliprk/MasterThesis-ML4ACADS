@@ -222,7 +222,7 @@ class PINN(object):
         # print('X[:,-1]:', X[:,-1], type(X[:,-1]), X[:,-1].shape)
         ### BACKWARD PASS ###
         # Output error
-        flowrate_diff =   # Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
+        # Difference between the FDDN flowrate and LTR Flow Rate and X[:,-1] - Returns the last column from the feature dataset
         flowrate_diff = np.reshape(X[:,-1] - V_hat_FDDN_scaled.flatten('F'), (n_records,1))
         # print('flowrate_diff:', list(flowrate_diff), type(flowrate_diff), flowrate_diff.shape)
 

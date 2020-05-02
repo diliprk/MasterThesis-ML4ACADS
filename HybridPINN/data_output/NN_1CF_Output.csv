@@ -1,0 +1,2 @@
+HoV,MTR_cf_hat,Early_Stopping_Reason,FlowRate_Diff_(LTR-FDDN),Final_MSELoss,Final_ErrorLoss,MaxEpochs
+C6,1.1782543653666675,ErrorConverged,-1.3983223454712288,1.9553053818441586,0.0006699521860890922,9

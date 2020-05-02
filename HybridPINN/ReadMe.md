@@ -1,16 +1,24 @@
+The code for running the Hybrid PINN implementation is segregated into 3 types of files:
+i.) **FDDN Library scripts** - `TZ6_FDDN_Lib.py` (or) `TZ3_FDDN_Lib.py`
+These python scripts contain the FDDN related functions that reads and modifies the `.fddn file` (in json format) and returns the flow rates output from the FDDN Solver as a dataframe.
 
-The two basic approaches for the Hybrid PINN architecture are contained in the following `.py` scripts:
-* `Hybrid_PINN_v1_x.py` - Refers to the **GeneralApproach** where we use normal feature scaling, `ReLu` activations in the hidden layer and random weight initializations and gradient updates with fixed learning rate.
-* `Hybrid_PINN_v2_x.py`- Refers to the **FE_LS** approach with customized Feature Engineering (`FE`), _linear activation_ in all layers,  lesser no. of neurons in the input and hidden layers, preset weight initialization and Line Search (`LS`) method to find the adaptive learning rate. This method gives more precise and faster convergence of the flowrates in lesser training iterations, albeit at a slight expense of more FDDN calls. 
+ii.) **PINN Model configuration python scripts**
+Each PINN model configuration is stored in a separate python script which is typically named after the model configuration (Eg: `TZ3_8CF.py`). This python script contains the class PINN which houses all the necessary functions to run the Hybrid PINN, such as:
+● NormbyMax to scale input features according to the max value
+● Initialize weights, biases and gradients of the model
+● Adaptive Line Search related functions to find $\alpha_2$
+● Forward propagation and backward propagation functions
+● FDDN Solver Processes
+● Update model parameters with the gradients from the backward pass
+● Make new predictions for validation and test points.
 
-The jupyter notebooks (`.ipynb` files) in this folder imports one of the above python scripts depending on the approach (**General** or **FE_LS**). Each notebook has a customized training function call to predict one or two correction factors. The sub-variants in the filenames of the `.ipynb` files, like:
+The above core functions are wrapped in the `train_1p_seq` (for _single data point training_) or `train_batch` (for _full batch training_) which can be called to start the whole training process.
 
- - **SingleHoVLoop** - refers to the training of the neural network one point at a time sequentially (i.e. [online learning](https://en.wikipedia.org/wiki/Online_machine_learning)), for optimal convergence, before moving to the next point. This yields optimal `c_fs` in a short span of time.
- - **miniBatch** - refers to the training of the neural network using batch learning or minibatch gradient descent, where we use  `batch_size >= 2`. miniBatch training is necessary so that we don't end up with an overfit model as we would get in the online (SingleHoVLoop) learning method. The generalized model which we will get in the miniBatch training is expected to give better predictions for existing and new points.
+iii.) **Jupyter notebooks (.ipynb files)**
+The jupyter notebook provides the front end interface for the user to execute the functions in the above python scripts and view the results. In the jupyter notebooks we load datasets, compute loss coefficients from CFD estimates, train PINN network, visualize train and validation loss performance and finally make predictions for test data points (if trained in _full batch_ mode)
+The filenames of these .ipynb files can end with the suffix _SingleDataPointTraining_ or _fullBatch_ denoting if the Hybrid PINN architecture was called to run in single data point training or full batch training modes.
 
-The `FDDN_Lib` script runs the FDDN Solver in batch mode (`run_fddn.bat`) and save the data frame results in a .csv file.
-
-#### Misc Implementations:
-
- 1. An ***Early stopping*** feature is implemented in the **GeneralApproach** which monitors the change in the `error_loss` function for the last 10 epochs and terminates the training if there is no improvement. This can be seen in action in the `PINN_v1.0_GeneralApproach_SingleHoVLoop_OneCF.ipynb` file.
- 2.  The `miniBatch` versions also use an ***Adaptive Batch Size*** technique during the training process that removes the converged points from the training data population and also lowers the batch size when the available *training data points is < initial batch size*
+**Notes**:
+1.) The Hybrid PINN requires the `FDDN Solver - version 7.0.0.107` which can be installed after approval from Airbus.
+2.) Please install all the required python libraries - `pandas, numpy, SciPy, scikit-learn, bokeh, plotly, selenium` to run this Hybrid Architecture
+2.) Please make sure to edit the location in the `TZ6_run_fddn.bat` and `TZ3_run_fddn.bat` files to your current working directory

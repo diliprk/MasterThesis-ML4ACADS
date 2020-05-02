@@ -1,0 +1,1 @@
+This folder contains the various hyperparameter studies that were done with the various Hybrid PINN configurations.

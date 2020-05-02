@@ -1,5 +1,7 @@
 # MasterThesis - Machine Learning for an Aircraft's Cabin Air Distribution System
-This repository is contains preliminary implementations of my R&D work for the proposed architectures in my Master Thesis
+This repository contains all the implementations of my Master Thesis work at Airbus Operations GmbH.
+* Hybrid - Physics Informed Neural Network (Novel proposed architecture)
 * CycleGANs
-* Hybrid Physics Informed Neural Network (Novel proposed architecture)
 * Bayesian Neural Networks
+
+All implementations are placed in their respective folders

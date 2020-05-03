@@ -1,16 +1,18 @@
+
 The code for running the Hybrid PINN implementation is segregated into 3 types of files:<br>
 i.) **FDDN Library scripts** - `TZ6_FDDN_Lib.py` (or) `TZ3_FDDN_Lib.py`
 These python scripts contain the FDDN related functions that reads and modifies the `.fddn file` (in json format) and returns the flow rates output from the FDDN Solver as a dataframe.<br>
 
 ii.) **PINN Model configuration python scripts**
 Each PINN model configuration is stored in a separate python script which is typically named after the model configuration (Eg: `TZ3_8CF.py`). This python script contains the class PINN which houses all the necessary functions to run the Hybrid PINN, such as:
-● NormbyMax to scale input features according to the max value
-● Initialize weights, biases and gradients of the model
-● Adaptive Line Search related functions to find $\alpha_2$
-● Forward propagation and backward propagation functions
-● FDDN Solver Processes
-● Update model parameters with the gradients from the backward pass
-● Make new predictions for validation and test points.
+
+ - NormbyMax to scale input features according to the max value
+ - Initialize weights, biases and gradients of the model 
+ - Adaptive Line   Search related functions to find $\alpha_2$
+ - Forward propagation and backward propagation functions
+ - FDDN Solver Processes 
+ - Update model  parameters with the gradients from the backward pass 
+ - Make new predictions for validation and test points.
 
 The above core functions are wrapped in the `train_1p_seq` (for _single data point training_) or `train_batch` (for _full batch training_) which can be called to start the whole training process.<br>
 

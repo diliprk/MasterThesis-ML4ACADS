@@ -8,4 +8,4 @@ This repository contains all the implementations of my Master Thesis work at Air
 
 All implementations are placed in their respective folders
 
-### [Link to Master Thesis Report](https://oc.cs.uni-saarland.de/owncloud/index.php/s/ojWy3CErirtg5Yc)
+### [Link to Master Thesis Report](https://1drv.ms/b/s!AqXj2AO66Ghugas0z3dTA9XkR1XUqA?e=xbaQLa)
